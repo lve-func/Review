@@ -1,0 +1,37 @@
+version: '3'
+services:
+  mediawiki:
+    image: localhost:5000/motorwiki
+    ports:
+      - "8080:80"
+    dns:
+      - "192.168.50.88"
+    links:
+      - mariadb
+      - elasticsearch
+    volumes:
+      - /home/lvefunc/docker/mediawiki/LocalSettings.php:/var/www/html/LocalSettings.php
+      - /home/lvefunc/docker/mediawiki/ldap.json:/var/www/html/ldap.json
+      - ./:/var/www/html/extensions/Review
+  mariadb:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    dns:
+      - "192.168.50.88"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wiki
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - /home/lvefunc/docker/mediawiki/mariadb:/var/lib/mysql
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    dns:
+     - "192.168.50.88"
+    volumes:
+      - /home/lvefunc/docker/mediawiki/esdata:/usr/share/elasticsearch/data

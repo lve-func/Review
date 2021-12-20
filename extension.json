@@ -1,0 +1,50 @@
+{
+	"name": "Review",
+	"author": [
+		"lve-func"
+	],
+	"url": "https://github.com/lve-func/Review",
+	"descriptionmsg": "Review extension.",
+	"license-name": "GPL-2.0-or-later",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.35.0"
+	},
+	"AvailableRights": [
+		"review"
+	],
+	"AutoloadClasses": {
+		"SpecialReview": "includes/SpecialReview.php",
+		"HooksDefinition": "includes/HooksDefinition.php",
+		"EditsService": "includes/services/EditsService.php"
+	},
+	"Hooks": {
+		"MultiContentSave": "HooksDefinition::onMultiContentSave"
+	},
+	"SpecialPages": {
+		"Review": "SpecialReview"
+	},
+	"ResourceModules": {
+		"ext.Review.specialPage": {
+			"localBasePath": "resources/ext.Review",
+			"remoteExtPath": "Review/resources/ext.Review",
+			"packageFiles": [
+				"ext.Review.specialPage.js"
+			],
+			"dependencies": [
+				"mediawiki.diff.styles",
+				"mediawiki.api",
+				"oojs-ui-core",
+				"oojs-ui-widgets"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "Review/resources"
+	},
+	"ServiceWiringFiles": [
+		"includes/services/ServiceWiring.php"
+	],
+	"manifest_version": 2
+}
