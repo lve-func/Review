@@ -6,7 +6,7 @@ class EditsService {
     public function handleNewEdit( $userID, $pageTitle, $pageText, $pageCategories, $parentPageID ) : bool {
         $lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
         $dbr = $lb->getConnectionRef( DB_REPLICA );
-        $result = $dbr->select(
+        $rows = $dbr->select(
             "review_edit", [
             "id",
             "edit_status"
@@ -16,13 +16,15 @@ class EditsService {
             "page_text = '" . $pageText . "'"
         ] );
 
-        foreach ( $result as $row ) {
+        foreach ( $rows as $row ) {
             switch ( $row->status ) {
                 // Such edit exists but it is already merged.
                 case 0:
                     break;
                 // Such edit exists and it is not merged.
-                // That means he did the same edit (which is pointless).
+                // That means user created non-unique edit.
+                // No need to be inserting it as new one since
+                // it is already on the list.
                 case 1:
                     return false;
                 // This edit is ready to be merged.
@@ -41,6 +43,7 @@ class EditsService {
     private function insertNew( $userID, $pageTitle, $pageText, $pageCategories, $parentPageID ) : void {
         $lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
         $dbw = $lb->getConnectionRef( DB_PRIMARY );
+
         $dbw->insert(
             "review_edit", [
             "user_id" => $userID,
@@ -53,6 +56,7 @@ class EditsService {
     private function updateStatus( $id, $newStatus ) : void {
         $lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
         $dbw = $lb->getConnectionRef( DB_PRIMARY );
+
         $dbw->update( "review_edit", [
             "edit_status" => $newStatus
         ], "id = " . $id );

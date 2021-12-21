@@ -11,12 +11,22 @@
 		"MediaWiki": ">= 1.35.0"
 	},
 	"AvailableRights": [
-		"review"
+		"review",
+		"review-admin"
 	],
 	"AutoloadClasses": {
 		"SpecialReview": "includes/SpecialReview.php",
 		"HooksDefinition": "includes/HooksDefinition.php",
-		"EditsService": "includes/services/EditsService.php"
+		"EditsService": "includes/service/EditsService.php",
+		"MappingService": "includes/service/MappingService.php",
+		"MappingGetAPI": "includes/api/MappingGetAPI.php",
+		"MappingInsertAPI": "includes/api/MappingInsertAPI.php",
+		"MappingDeleteAPI": "includes/api/MappingDeleteAPI.php"
+	},
+	"APIModules": {
+		"getMapping": "MappingGetAPI",
+		"insertMapping": "MappingInsertAPI",
+		"deleteMapping": "MappingDeleteAPI"
 	},
 	"Hooks": {
 		"MultiContentSave": "HooksDefinition::onMultiContentSave"
@@ -44,7 +54,7 @@
 		"remoteExtPath": "Review/resources"
 	},
 	"ServiceWiringFiles": [
-		"includes/services/ServiceWiring.php"
+		"includes/service/ServiceWiring.php"
 	],
 	"manifest_version": 2
 }
